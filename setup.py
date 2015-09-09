@@ -9,5 +9,6 @@ setup(
     author_email='dirg@its.umu.se',
     url='https://github.com/its-dirg/s2sproxy-module-comanage',
     packages=find_packages('src'),
-    package_dir={'': 'src'}
+    package_dir={'': 'src'},
+    install_requires=['requests==2.7.0']
 )
