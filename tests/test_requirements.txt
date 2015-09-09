@@ -1,2 +1,3 @@
 pytest==2.7.2
 responses==0.4.0
+git+https://github.com/its-dirg/s2sproxy@v0.1
