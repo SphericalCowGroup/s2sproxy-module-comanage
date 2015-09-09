@@ -22,6 +22,6 @@ Instance attributes:
         user identifier, e.g. "eduPersonPrincipalName"
 
 To use the attribute transformation module with the s2sproxy, add the initialized instance as the
-``ATTRIBUTE_MODULE` in proxy configuration (``proxy_conf.py``):
+``ATTRIBUTE_MODULE`` in proxy configuration (``proxy_conf.py``):
 
     ATTRIBUTE_MODULE = COmanageAttributeModule(url, auth, co_id, attr_name)
