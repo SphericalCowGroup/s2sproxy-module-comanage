@@ -118,15 +118,16 @@ class COmanageAttributeModule(AttributeModule):
         json = self._make_request("/names.json", {"copersonid": person_id})
         logger.debug("_get_name_info: json is %s" % json)
 
-        for entry in json["Names"]:
-            if entry["PrimaryName"]:
-                gn = entry["Given"]
-                sn = entry["Family"]
-                return {
-                    "givenName": gn,
-                    "sn": sn,
-                    "displayName": "{gn} {sn}".format(gn=gn, sn=sn)
-                }
+        if 'Names' in json:
+            for entry in json["Names"]:
+                if entry["PrimaryName"]:
+                    gn = entry["Given"]
+                    sn = entry["Family"]
+                    return {
+                        "givenName": gn,
+                        "sn": sn,
+                        "displayName": "{gn} {sn}".format(gn=gn, sn=sn)
+                    }
 
         return {}
 
@@ -136,10 +137,11 @@ class COmanageAttributeModule(AttributeModule):
                                   {"copersonid": person_id})
         logger.debug("_get_email_address: json is %s" % json)
 
-        for entry in json["EmailAddresses"]:
-            m = self.email_re_object.search(entry["Type"])
-            if m:
-                return {"mail": entry["Mail"]}
+        if 'EmailAddresses' in json:
+            for entry in json["EmailAddresses"]:
+                m = self.email_re_object.search(entry["Type"])
+                if m:
+                    return {"mail": entry["Mail"]}
 
         return {}
 
@@ -149,9 +151,10 @@ class COmanageAttributeModule(AttributeModule):
                                   {"copersonid": person_id})
         logger.debug("_get_vo_info: json is %s" % json)
 
-        for entry in json["Identifiers"]:
-            if entry["Type"] == self.vo_identifier_type:
-                return {"uid": entry["Identifier"]}
+        if 'Identifiers' in json:
+            for entry in json["Identifiers"]:
+                if entry["Type"] == self.vo_identifier_type:
+                    return {"uid": entry["Identifier"]}
 
         return {}
 
@@ -181,6 +184,8 @@ class COmanageAttributeModule(AttributeModule):
 
         if resp.status_code == 200:
             return resp.json()
+        elif resp.status_code == 204: # status code 204 is No Content
+            return {}
         else:
             raise FailedRequestError(
                 "{status}: {text}".format(status=resp.status_code,
